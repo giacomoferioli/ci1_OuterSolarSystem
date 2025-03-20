@@ -1,0 +1,42 @@
+#include "integrators.hpp"
+
+void calcYprime(){
+    for(int i = 0; i < 6; i++){
+        yprime[18+3*i+0] = p_q[3*i+0] / m[i];
+        yprime[18+3*i+1] = p_q[3*i+1] / m[i];
+        yprime[18+3*i+2] = p_q[3*i+2] / m[i];
+        
+        yprime[3*i+0] = 0;
+        yprime[3*i+1] = 0;
+        yprime[3*i+2] = 0;
+
+        for( int j = 0; j < 6; j++){ //indice dell'altro corpo
+            if( j != i ){ //calcolo accelerazione
+                double d = sqrt( pow(p_q[18+3*i+0]-p_q[18+3*j+0],2) + pow(p_q[18+3*i+1]-p_q[18+3*j+1],2) + pow(p_q[18+3*i+2]-p_q[18+3*j+2],2));
+                yprime[3*i+0] -= G_const * m[i] * m[j] * (p_q[18+3*i+0]-p_q[18+3*j+0]) / pow(d,3);
+                yprime[3*i+1] -= G_const * m[i] * m[j] * (p_q[18+3*i+1]-p_q[18+3*j+1]) / pow(d,3);
+                yprime[3*i+2] -= G_const * m[i] * m[j] * (p_q[18+3*i+2]-p_q[18+3*j+2]) / pow(d,3);
+            }
+        }
+    }
+}
+
+void euler_expl(double h, int steps){
+    for( int _i = 0; _i < steps; _i++){
+        calcYprime();
+        for(int i = 0; i < 36;i++)
+            p_q[i] += h * yprime[i];
+    }
+}
+
+void euler_si(double h,int steps){
+    for( int _i = 0; _i < steps; _i++){
+        calcYprime();
+        for(int i = 0;i<18;i++)
+            p_q[i] += h * yprime[i];
+        calcYprime();
+        for(int i = 0;i<18;i++)
+            p_q[18+i] += h * yprime[18+i];
+    }
+    steps_done += steps;
+}
