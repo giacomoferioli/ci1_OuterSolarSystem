@@ -34,6 +34,7 @@ class Vec3{
         Vec3 crossprod(const Vec3& b) const;
 
         double mod() const;
+        double mod2() const;
         Vec3 Normalize() const;
 
         Vec3& operator+=(const Vec3& b);

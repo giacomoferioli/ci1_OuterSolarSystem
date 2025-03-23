@@ -45,11 +45,3 @@ class Camera{
 };
 
 #endif
-
-/*
-
-    
-
-
-
-*/

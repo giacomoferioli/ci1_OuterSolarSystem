@@ -30,8 +30,20 @@ inline double v_q[6*PLANETS]={
 # INTEGRATOR DATA #
 ###################
 */
-#define ITERS 10000
-#define STEPS_PER_SAVE 10
+
+enum Integrator{
+    EXPLICIT_EULER,
+    SYMPLECTIC_EULER
+};
+
+#define DEFAULT_MAX_ITERATIONS 1000
+
+#define DEFAULT_EXPLICIT_EULER_ITERATIONS 50000
+#define DEFAULT_EXPLICIT_EULER_H 10
+
+#define DEFAULT_SYMPLECTIC_EULER_ITERATIONS 3000
+#define DEFAULT_SYMPLECTIC_EULER_H 100
+
 
 inline unsigned int steps_done = 0;
 
@@ -45,13 +57,16 @@ inline unsigned int steps_done = 0;
 #define ANGLUAR_MOVEMENT_INCREMENT 0.03
 inline unsigned int colors[6] = {0xFFFFFFFF, 0xFF4D00FF,0xFFdF00FF,0x4444FFFF,0x0000FFFF,0x888888FF}; 
 
-#define SIZE 1000
-#define DRAWRANGE 45
+#define SIZE 800
+#define DRAWRANGE 50
 
 #define KEY(x) sf::Keyboard::x
 #define ISDOWN(key) sf::Keyboard::isKeyPressed((sf::Keyboard::Key)key)
 
 
 #define ANGULAR_SPEED M_PI
+
+#define GRAPH_PADDING 20
+
 
 #endif

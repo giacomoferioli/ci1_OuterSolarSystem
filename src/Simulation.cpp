@@ -1,6 +1,18 @@
 #include "Simulation.hpp"
 
 Simulation::Simulation(const double* m, const double* v_q,Integrator integrator) : m(m), v_q(v_q), integrator(integrator), steps_done(0){
+    switch(integrator){
+        case EXPLICIT_EULER:
+            max_steps = DEFAULT_EXPLICIT_EULER_ITERATIONS;
+            break;
+        case SYMPLECTIC_EULER:
+            max_steps = DEFAULT_SYMPLECTIC_EULER_ITERATIONS;
+            break;
+        default:
+            max_steps = DEFAULT_MAX_ITERATIONS;
+            break;
+    }
+    
     reset();
 }
 
@@ -39,7 +51,7 @@ void Simulation::calc_q_prime(){
 }
 
 void Simulation::symplectic_euler(double h,unsigned int steps){
-    for( uint _i = 0; _i < steps; _i++){
+    for( unsigned int _i = 0; _i < steps; _i++){
         calc_p_prime();
         for(int i = 0;i<PLANETS;i++)
             p_q[i] += h * p_q_prime[i];
@@ -47,17 +59,43 @@ void Simulation::symplectic_euler(double h,unsigned int steps){
         for(int i = 0;i<PLANETS;i++)
             p_q[PLANETS+i] += h * p_q_prime[PLANETS+i];
     }
-    steps_done += steps;
+}
+
+void Simulation::explicit_euler(double h, unsigned int steps){
+    for( unsigned int _i = 0; _i < steps; _i++){
+        calc_p_prime();
+        calc_q_prime();
+        for(int i = 0; i < PLANETS * 2;i++)
+            p_q[i] += h * p_q_prime[i];
+    }
 }
 
 void Simulation::step(double h, unsigned int steps){
+    steps_done += steps;
     switch (integrator)
     {
-    case SYMPLECTIC_EULER:
-        symplectic_euler(h,steps);
-        break;
-    
+        case SYMPLECTIC_EULER:
+            symplectic_euler(h?h:DEFAULT_SYMPLECTIC_EULER_H,steps);
+            break;
+        case EXPLICIT_EULER:
+            explicit_euler(h?h:DEFAULT_EXPLICIT_EULER_H,steps);
+            break;
+
     default:
         break;
     }
+}
+
+
+double Simulation::H(){
+    double ris = 0;
+
+    for( int i=0; i < PLANETS;i++){
+        ris += .5 / m[i] * p_q[i].mod2();
+
+        for( int j=0; j < i; j++)
+            ris += G_const * m[i] * m[j] / (p_q[PLANETS+i] - p_q[PLANETS+j]).mod();
+    }
+
+    return ris;
 }

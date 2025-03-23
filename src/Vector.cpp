@@ -34,6 +34,10 @@ double Vec3::mod() const{
 	return sqrt( pow(x(),2) + pow(y(),2) + pow(z(),2));
 }
 
+double Vec3::mod2() const{
+	return pow(x(),2) + pow(y(),2) + pow(z(),2);
+}
+
 Vec3 Vec3::Normalize() const{
 	double m = mod();
 	return (m == 0) ? *this : *this / m;
