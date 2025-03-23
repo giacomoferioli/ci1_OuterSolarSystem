@@ -4,7 +4,9 @@
 #define GRAPH_HEIGHT img.getSize().y
 
 
-Graph::Graph(sf::Image& img) : img(img), size(img.getSize().x) {};
+Graph::Graph(unsigned int width, unsigned int height) {
+    img.create(width,height);
+}
 
 void Graph::reset(){
     for(unsigned int i = 0; i < GRAPH_WIDTH;i++)
@@ -16,23 +18,27 @@ void Graph::reset(){
 void Graph::setGrid(unsigned int horizontal_lines_number, unsigned int vertical_line_number){
     hlines = horizontal_lines_number;
     vlines = vertical_line_number;
+    //horizontal borders
     for(unsigned int i = GRAPH_PADDING;i < GRAPH_WIDTH - GRAPH_PADDING;i++){
         img.setPixel(i,GRAPH_PADDING,sf::Color::White);
         img.setPixel(i,GRAPH_HEIGHT-GRAPH_PADDING-1,sf::Color::White);
     }
 
+    //vertical borders
     for(unsigned int j = GRAPH_PADDING;j < GRAPH_HEIGHT - GRAPH_PADDING;j++){
         img.setPixel(GRAPH_PADDING,j,sf::Color::White);
-        img.setPixel(GRAPH_HEIGHT - GRAPH_PADDING-1,j,sf::Color::White);
+        img.setPixel(GRAPH_WIDTH - GRAPH_PADDING-1,j,sf::Color::White);
     }
 
+    //vertical lines
     double spacing = (double)(GRAPH_WIDTH - 2 * GRAPH_PADDING) / (vertical_line_number+1);
     for(unsigned int i = 0; i < vertical_line_number; i++){
         int x = GRAPH_PADDING + (int)round(spacing * (1+i));
         for(unsigned int j = GRAPH_PADDING+1;j < GRAPH_HEIGHT-GRAPH_PADDING-1;j++)
-            img.setPixel(x,j,sf::Color(0x888888FF)); 
+            img.setPixel(x,j,sf::Color(0x222222FF)); 
     }
 
+    //horizontal lines
     spacing = (double)(GRAPH_HEIGHT - 2 * GRAPH_PADDING) / (horizontal_lines_number+1);
     for(unsigned int j = 0; j < horizontal_lines_number; j++){
         int y = GRAPH_PADDING + (int)round(spacing * (1+j));

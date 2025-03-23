@@ -11,7 +11,7 @@
 
 int main(){
     //init
-    Simulation sim(m,v_q,EXPLICIT_EULER);
+    Simulation sim(m,v_q,STORMER_VERLET);
     UI ui(sim);
 
     ui.start();

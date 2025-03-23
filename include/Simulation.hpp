@@ -15,12 +15,15 @@ class Simulation{
     Vec3 p_q[2*PLANETS];
     Vec3 p_q_prime[2*PLANETS];
 
+    Vec3* q_past;
+
     private:
         void calc_p_prime();
         void calc_q_prime();
 
         void symplectic_euler(double h,unsigned int steps);
         void explicit_euler(double h,unsigned int steps);
+        void stormer_verlet(double h,unsigned int steps);
 
     public:
         Simulation(const double* m, const double* v_q,Integrator integrator);

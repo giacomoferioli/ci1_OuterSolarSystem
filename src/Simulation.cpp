@@ -8,6 +8,9 @@ Simulation::Simulation(const double* m, const double* v_q,Integrator integrator)
         case SYMPLECTIC_EULER:
             max_steps = DEFAULT_SYMPLECTIC_EULER_ITERATIONS;
             break;
+        case STORMER_VERLET:
+            max_steps = DEFAULT_STORMER_VERLET_ITERATIONS;
+            break;
         default:
             max_steps = DEFAULT_MAX_ITERATIONS;
             break;
@@ -31,6 +34,11 @@ void Simulation::reset(){
         );
     }
     steps_done = 0;
+
+    if(q_past != nullptr){
+        delete[] q_past;
+        q_past = nullptr;
+    }
 }
 
 void Simulation::calc_p_prime(){
@@ -70,6 +78,30 @@ void Simulation::explicit_euler(double h, unsigned int steps){
     }
 }
 
+void Simulation::stormer_verlet(double h, unsigned int steps){
+    if( q_past == nullptr){
+        q_past = new Vec3[PLANETS];
+        for(uint i = 0; i < PLANETS;i++){
+            q_past[i] = p_q[PLANETS+i];
+            calc_p_prime();
+            p_q[PLANETS + i] += p_q[i]/m[i]*h + p_q_prime[i] / ( 2 * m[i]) * h * h;
+        }
+        
+    }
+    
+    Vec3 q_next;
+    for( unsigned int _ = 0; _ < steps; _++){
+        calc_p_prime();
+        for( uint i = 0; i < PLANETS; i++){
+            q_next = 2 * p_q[PLANETS+i] - q_past[i] + p_q_prime[i] / m[i] * h * h;
+            p_q[i] = m[i] * (q_next-p_q[PLANETS+i]) / h;
+            q_past[i] = p_q[PLANETS+i];
+            p_q[PLANETS+i] = q_next;
+        }
+    }
+    
+}
+
 void Simulation::step(double h, unsigned int steps){
     steps_done += steps;
     switch (integrator)
@@ -79,6 +111,9 @@ void Simulation::step(double h, unsigned int steps){
             break;
         case EXPLICIT_EULER:
             explicit_euler(h?h:DEFAULT_EXPLICIT_EULER_H,steps);
+            break;
+        case STORMER_VERLET:
+            stormer_verlet(h?h:DEFAULT_STORMER_VERLET_H,steps);
             break;
 
     default:

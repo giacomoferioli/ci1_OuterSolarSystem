@@ -11,11 +11,10 @@
 class UI{
     sf::RenderWindow w;
     sf::Image img;
-    sf::Image graph;
     Simulation& sim;
     
     Camera cam;
-    Graph gr;
+    Graph graph;
 
     private:
         void tick();

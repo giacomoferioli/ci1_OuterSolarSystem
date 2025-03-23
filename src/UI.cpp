@@ -1,12 +1,11 @@
 #include "UI.hpp"
 
-UI::UI(Simulation& sim) : w(sf::VideoMode(2*SIZE,SIZE),"Outer Solar System"), sim(sim), cam(img,Vec3::X), gr(graph){
+UI::UI(Simulation& sim) : w(sf::VideoMode(2*SIZE,SIZE),"Outer Solar System"), sim(sim), cam(img,Vec3::X), graph(SIZE,SIZE/2){
     img.create(SIZE,SIZE,sf::Color::Black);
-    graph.create(SIZE,SIZE,sf::Color::Black);
-    
-    gr.setGrid(5,0);
-    gr.setXrange(0,sim.maxSteps());
-    gr.setYrange(0,1.3*sim.H());
+
+    graph.setGrid(5,8);
+    graph.setXrange(0,sim.maxSteps());
+    graph.setYrange(0,1.3*sim.H());
 }
 
 void UI::input(){
@@ -49,10 +48,7 @@ void UI::input(){
             img.setPixel(i/SIZE,i%SIZE,sf::Color::Black);
         }
 
-        gr.reset();
-        
-
-
+        graph.reset();
         sim.reset();
     }
     if( checkKey(sf::Keyboard::Enter)){
@@ -68,17 +64,8 @@ void UI::save(std::string filename){
 
     sim.reset();
 
-    /*
-    std::ofstream energy(filename+".csv");
-    energy << "N,H\n";
-    energy << "0," << sim.H() << "\n";
-
-        
-    for(int i = 1;!sim.done();i+=STEPS_PER_SAVE,sim.step(100,STEPS_PER_SAVE))
-        energy << std::to_string(i) << "," << sim.H() << "\n";
-        
-    energy.close();
-    */
+    graph.get_img().saveToFile(filename + "-" + graph.toString() + ".png");
+    std::cout << graph << std::endl;
 }
 
 void UI::draw(){
@@ -86,7 +73,7 @@ void UI::draw(){
         cam.drawPoint(sim.getPlanetPos(i),colors[i]);
     }
 
-    gr.drawPoint(sim.steps(),sim.H(),sf::Color::Green);
+    graph.drawPoint(sim.steps(),sim.H(),sf::Color::Green);
 }
 
 void UI::display(){
@@ -95,7 +82,7 @@ void UI::display(){
     sf::Sprite sprite1(text1);
 
     sf::Texture text2;
-    text2.loadFromImage(graph);
+    text2.loadFromImage(graph.get_img());
     sf::Sprite sprite2(text2);
 
     sprite2.setPosition(sf::Vector2f(SIZE,0));
