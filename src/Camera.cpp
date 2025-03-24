@@ -2,7 +2,7 @@
 
 #define SWAP(a,b) {auto __amogus=a;a=b;b=__amogus;}
 
-Camera::Camera(sf::Image& img,const Vec3 direction,double fov,double viewPlaneDistance) : img(img) , direction(direction) {
+Camera::Camera(sf::Image& img,const Vec3 direction,double viewPlaneBoundary) : img(img) , direction(direction), viewPlaneBoundary(viewPlaneBoundary) {
     calcCameraToCanonMatrix();
     CanonToCameraMatrix = CameraToCanonMatrix.transpose();
 }
@@ -68,7 +68,6 @@ sf::Vector2f Camera::projectPoint(Vec3 a) const{
     //a = a / a.x() * viewPlaneDistance;
 
     // lo schermo viene mappato ad un quadrato di lato 2 * viewPlaneBoundary centrato in 0
-    double viewPlaneBoundary = VIEWPLANEBOUNDARY;
     return sf::Vector2f( size.x - ipol(-viewPlaneBoundary,viewPlaneBoundary,0,size.x,a.y()) , (double)size.y - ipol(-viewPlaneBoundary,viewPlaneBoundary,0,size.y,a.z()));
 }
 

@@ -3,9 +3,9 @@
 void ExplicitEuler::step(){
     steps_done++;
 
-    calc_p_prime();
+    calc_p_prime(); //calcola la p primo e lo salva nel buffer Vec3 p_prime[6]
     calc_q_prime();
-    for(int i = 0; i < PLANETS;i++){
+    for(int i = 0; i < PLANETS;i++){ //aggiorna p e q, h è il passo temporale
         p[i] += h * p_prime[i];
         q[i] += h * q_prime[i];
     }
@@ -23,10 +23,12 @@ void SymplecticEuler::step(){
 }
 
 void StormerVerlet::init(){
+    //calcola q1 partendo da q0
     for(uint i = 0; i < PLANETS;i++){
         q_past[i] = q[i];
         calc_p_prime();
-        q[i] += p[i]/m[i]*DEFAULT_STORMER_VERLET_H + p_prime[i] / ( 2 * m[i]) * DEFAULT_STORMER_VERLET_H * DEFAULT_STORMER_VERLET_H;
+        q[i] += p[i]/m[i]*DEFAULT_STORMER_VERLET_H + p_prime[i] / 
+            ( 2 * m[i]) * DEFAULT_STORMER_VERLET_H * DEFAULT_STORMER_VERLET_H;
     }    
 }
 

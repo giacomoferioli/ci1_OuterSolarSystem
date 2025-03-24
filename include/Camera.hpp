@@ -14,6 +14,8 @@ class Camera{
 
         Vec3 direction;         //where the camera is facing
 
+        double viewPlaneBoundary;
+
         Matrix CameraToCanonMatrix;
         Matrix CanonToCameraMatrix;
 
@@ -22,7 +24,7 @@ class Camera{
         void calcCameraToCanonMatrix();
 
     public:
-        Camera(sf::Image& img,const Vec3 direction = Vec3(1,0,0),double fov = M_PI/2,double viewPlaneDistance = .1);
+        Camera(sf::Image& img,const Vec3 direction = Vec3(1,0,0), double view_plane_distance = VIEWPLANEBOUNDARY);
 
         Vec3 getDirection() const {return direction;}
         
@@ -35,6 +37,8 @@ class Camera{
         void rotateX(double angle);
         void rotateY(double angle);
         void rotateZ(double angle);
+        void zoom(double m) { viewPlaneBoundary *= m;}
+        void resetZoom() { viewPlaneBoundary = VIEWPLANEBOUNDARY;}
 
         void drawPoint(const Vec3& point,int color=0x00FF00FF);        
 };

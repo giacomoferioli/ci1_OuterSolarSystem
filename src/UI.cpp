@@ -42,6 +42,14 @@ void UI::input(){
             theta = M_PI/2;
         reset=true;
     }
+    if( ISDOWN(sf::Keyboard::PageUp)){
+        cam.zoom(.95);
+        reset = true;
+    }
+    if( ISDOWN(sf::Keyboard::PageDown)){
+        cam.zoom(1.05);
+        reset = true;
+    }
     if(reset){
         cam.setHeading(Vec3(1,0,0));
         cam.rotateZ(phi);
@@ -53,19 +61,19 @@ void UI::input(){
         graph.reset();
         sim.reset();
     }
-    if( checkKey(sf::Keyboard::Enter)){
-        //std::string filename("export-");
-        //filename = filename + std::to_string(ms());
-
-        save("");
-    }
+    if( checkKey(sf::Keyboard::Enter))
+        saveImg();
+    if( checkKey(sf::Keyboard::G))
+        saveGraph();
+    
 }
 
-void UI::save(std::string filename){
+void UI::saveImg(std::string filename){
     img.saveToFile(filename+sim.toString()+".png");
+    std::cout << sim.toString() << std::endl;
+}
 
-    sim.reset();
-
+void UI::saveGraph(std::string filename){
     graph.get_img().saveToFile(filename+graph.toString() + ".png");
     std::cout << graph << std::endl;
 }

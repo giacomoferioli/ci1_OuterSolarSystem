@@ -71,7 +71,8 @@ inline unsigned int colors[6] = {0xFFFFFFFF, 0xFF4D00FF,0xFFdF00FF,0x4444FFFF,0x
 #define KEY(x) sf::Keyboard::x
 #define ISDOWN(key) sf::Keyboard::isKeyPressed((sf::Keyboard::Key)key)
 
-
+#define START_THETA M_PI/6
+#define START_PHI 3./4*M_PI
 #define ANGULAR_SPEED M_PI
 
 #define GRAPH_PADDING 20

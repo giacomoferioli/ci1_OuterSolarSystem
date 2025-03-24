@@ -25,7 +25,8 @@ class UI{
     public:
         UI(Simulation& sim);
         void start();
-        void save(std::string filename);
+        void saveImg(std::string filename = "");
+        void saveGraph(std::string filename = "");
 
 };
 
