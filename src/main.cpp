@@ -2,8 +2,7 @@
 #include "Integrators.hpp"
 
 int main(){
-    ExplicitEuler sim(m,v_q);
-    sim.setMaxSteps(1000000);
+    StormerVerlet sim(m,v_q);
     UI ui(sim);
 
     ui.start();
