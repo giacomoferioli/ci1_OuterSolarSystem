@@ -1,9 +1,7 @@
 #include <Common.hpp>
 #include "Matrix.hpp"
 #include <util.hpp>
-#include <queue>
 #include <vector>
-#include <functional>
 
 #ifndef CAMERA
 #define CAMERA
@@ -22,9 +20,6 @@ class Camera{
         sf::Vector2f projectPoint(Vec3 a) const;
         bool projectLine(sf::Vector2f* dst1, sf::Vector2f* dst2, Vec3 a, Vec3 b) const;
         void calcCameraToCanonMatrix();
-
-        //NON TOCCARE QUESTA ROBA - VALORI PRECOMPUTATI
-        double tanfovmezzi, sinfovmezzi;
 
     public:
         Camera(sf::Image& img,const Vec3 direction = Vec3(1,0,0),double fov = M_PI/2,double viewPlaneDistance = .1);

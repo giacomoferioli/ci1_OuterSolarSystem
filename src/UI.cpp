@@ -3,9 +3,11 @@
 UI::UI(Simulation& sim) : w(sf::VideoMode(2*SIZE,SIZE),"Outer Solar System"), sim(sim), cam(img,Vec3::X), graph(SIZE,SIZE/2){
     img.create(SIZE,SIZE,sf::Color::Black);
 
+    sim.reset(); //il reset nel costruttore della sim non è in grado di chiamare gli init ovverridati, da rivedere meglio
+
     graph.setGrid(5,8);
-    graph.setXrange(0,sim.maxSteps());
-    graph.setYrange(0,1.3*sim.H());
+    graph.setXrange(0,sim.getMaxSteps());
+    graph.setYrange(0,1.2);
 }
 
 void UI::input(){
@@ -52,19 +54,19 @@ void UI::input(){
         sim.reset();
     }
     if( checkKey(sf::Keyboard::Enter)){
-        std::string filename("export-");
-        filename = filename + std::to_string(ms());
+        //std::string filename("export-");
+        //filename = filename + std::to_string(ms());
 
-        save(filename);        
+        save("");
     }
 }
 
 void UI::save(std::string filename){
-    img.saveToFile(filename+".png");
+    img.saveToFile(filename+sim.toString()+".png");
 
     sim.reset();
 
-    graph.get_img().saveToFile(filename + "-" + graph.toString() + ".png");
+    graph.get_img().saveToFile(filename+graph.toString() + ".png");
     std::cout << graph << std::endl;
 }
 
@@ -73,7 +75,7 @@ void UI::draw(){
         cam.drawPoint(sim.getPlanetPos(i),colors[i]);
     }
 
-    graph.drawPoint(sim.steps(),sim.H(),sf::Color::Green);
+    graph.drawPoint(sim.getStepsDone(),sim.H_rel(),sf::Color::Green);
 }
 
 void UI::display(){
@@ -98,7 +100,7 @@ void UI::tick(){
     input();
     
     while(ms() - lastframe < FRAMELENGTH){
-        if(!sim.done()){
+        if(!sim.isDone()){
             sim.step();
             draw();
         }

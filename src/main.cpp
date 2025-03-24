@@ -1,17 +1,9 @@
-#include "data.h"
-#include <iostream>
-#include <fstream>
-#include "math.h"
-#include <SFML/Graphics.hpp>
-#include "Matrix.hpp"
-#include "Camera.hpp"
-#include "Simulation.hpp"
 #include "UI.hpp"
-#include <sstream>
+#include "Integrators.hpp"
 
 int main(){
-    //init
-    Simulation sim(m,v_q,STORMER_VERLET);
+    ExplicitEuler sim(m,v_q);
+    sim.setMaxSteps(1000000);
     UI ui(sim);
 
     ui.start();

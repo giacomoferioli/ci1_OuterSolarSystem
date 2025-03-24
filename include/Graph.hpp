@@ -1,7 +1,4 @@
-#include <SFML/Graphics.hpp>
 #include <Common.hpp>
-#include <sstream>
-#include "math.h"
 #include "util.hpp"
 
 #ifndef GRAPH_RENDERER
