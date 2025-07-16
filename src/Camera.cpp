@@ -65,9 +65,11 @@ void Camera::rotateZ(double angle){
 //HAS TO BE IN CAMERA COORDINATES
 sf::Vector2f Camera::projectPoint(Vec3 a) const{
     static const sf::Vector2u size = img.getSize();
+    //scommentare sta riga per averlo in pospettiva
     //a = a / a.x() * viewPlaneDistance;
 
     // lo schermo viene mappato ad un quadrato di lato 2 * viewPlaneBoundary centrato in 0
+    // non mi ricordo perchè ho fatto sta roba col viewplaneboundary ma trusterò il processo
     return sf::Vector2f( size.x - ipol(-viewPlaneBoundary,viewPlaneBoundary,0,size.x,a.y()) , (double)size.y - ipol(-viewPlaneBoundary,viewPlaneBoundary,0,size.y,a.z()));
 }
 
@@ -94,10 +96,9 @@ bool Camera::projectLine(sf::Vector2f* const dst1,sf::Vector2f* const dst2, Vec3
 void Camera::drawPoint(const Vec3& point,int color){
     sf::Vector2f pt = projectPoint(CanonToCameraMatrix * point);
 
-    sf::CircleShape c(2);
-    c.setPosition(pt);
-    c.setFillColor(sf::Color::Green);
-
-    if(pt.x > 0 && pt.x < SIZE - 1 && pt.y > 0 && pt.y < SIZE - 1)
-        img.setPixel((int)round(pt.x),(int)round(pt.y),sf::Color(color));
+    int ix = round(pt.x), iy = round(pt.y);
+    for(uint i = ix-1; i < ix+2; i++)
+        for(uint j = iy-1; j < iy+2; j++)
+            if(ix > 0 && ix < SIZE - 1 && iy > 0 && iy < SIZE - 1)
+                img.setPixel(ix,iy,sf::Color(color));
 }

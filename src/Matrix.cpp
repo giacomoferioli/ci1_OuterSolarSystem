@@ -25,6 +25,7 @@ Matrix::~Matrix(){
     delete[] data;
 }
 
+//io quando i floating point
 Matrix& Matrix::cleanup(){
     for(int i = 0; i < 9; i ++){
         if( fabs( data[i] ) < ZERO_THRESHOLD)

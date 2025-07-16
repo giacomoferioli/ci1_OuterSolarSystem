@@ -9,6 +9,8 @@
 #define _y data[1]
 #define _z data[2]
 
+//i dati sono in un pointer perchè originariamente sta classe era un vettore di dim arbitraria e mi pesava il culo riadattare tutto
+//(averci i componenti tutti belli in fila aiuta a lavorare con le matrici)
 class Vec3{
     private:
         double* data;

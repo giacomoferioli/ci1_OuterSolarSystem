@@ -103,10 +103,11 @@ void UI::display(){
     w.display();
 }
 
+//potrebbe venir pensata meglio
 void UI::tick(){
     long lastframe = ms();
     input();
-    
+
     while(ms() - lastframe < FRAMELENGTH){
         if(!sim.isDone()){
             sim.step();
